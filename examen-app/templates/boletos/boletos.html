@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    {% load static %}
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,16 +12,23 @@
     <main>
         <div class="container">
             <h1>{{ titulo }}</h1>
-            <p>Total de Boletos: {{ total_boletos }}</p>
-            <p>Total de Eventos: {{ total_eventos }}</p>
+
+            {% if evento %}
+                <p><strong>Evento:</strong> {{ evento.name }}</p>
+            {% else %}
+                <p>Mostrando todos los boletos disponibles</p>
+            {% endif %}
+
             <div class="boletos-list">
                 {% for boleto in boletos %}
                     <div class="boleto-item">
                         <img src="{% static 'images/boletos.jpg' %}" alt="Imagen de Boleto">
-                        <h2>{{ boleto.name }}</h2>
-                        <p>Fecha: {{ boleto.fecha }}</p>
-                        <p>Precio: {{ boleto.precio }}</p>
+                        <p><strong>Fecha:</strong> {{ boleto.fecha }}</p>
+                        <p><strong>Precio:</strong> ${{ boleto.precio }}</p>
+                        <a href="#" class="boton-comprar">Comprar</a> 
                     </div>
+                {% empty %}
+                    <p>No hay boletos disponibles.</p>
                 {% endfor %}
             </div>
         </div>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+</head>
+<body>
+
+    {% include 'base/header.html' %}  <!-- Incluir el header -->
+
+    <h1>Agregar Producto</h1>
+    <form id="agregarProductoForm">
+        <label for="name">Nombre del Producto:</label>
+        <input type="text" id="name" name="name">
+        <br>
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" name="precio" step="0.01">
+        <br>
+        <label for="localidad">Localidad:</label>
+        <select id="localidad" name="localidad">
+            <!-- Aquí deberías cargar las localidades desde tu base de datos -->
+            <option value="1">Localidad 1</option>
+            <option value="2">Localidad 2</option>
+        </select>
+        <br>
+        <button type="submit">Agregar Producto</button>
+    </form>
+
+    <h2>Reglas</h2>
+    <ul>
+        <li>Ningún campo debe quedar vacío</li>
+        <li>Mostrar mensaje de guardado o de error en caso de fallar</li>
+        <li>El precio del producto debe ser mayor a 0</li>
+        <li>Solo se pueden agregar 10 productos por día</li>
+    </ul>
+
+    <h2>Productos Recientemente Agregados</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Localidad</th>
+                <th>Fecha de Creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.name }}</td>
+                    <td>{{ producto.precio }}</td>
+                    <td>{{ producto.localidad }}</td>
+                    <td>{{ producto.fecha_creacion }}</td>
+                    <td><button>Eliminar</button></td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No hay productos agregados.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'base/footer.html' %}  <!-- Incluir el footer -->
+
+</body>
+</html>

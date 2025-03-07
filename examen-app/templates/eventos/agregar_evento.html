@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Evento</title>
+    <link rel="stylesheet" href="{% static 'css/eventos.css' %}">
+</head>
+<body>
+    {% include 'base/header.html' %}
+    <main>
+        <div class="container">
+            <h1>Agregar Nuevo Evento</h1>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn-agregar">Guardar Evento</button>
+            </form>
+            <a href="{% url 'eventos' %}" class="btn-cancelar">Cancelar</a>
+        </div>
+    </main>
+    {% include 'base/footer.html' %}
+</body>
+</html>

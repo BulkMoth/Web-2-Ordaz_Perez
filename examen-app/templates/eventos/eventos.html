@@ -24,7 +24,10 @@
                             <p><strong>Fecha de Inicio:</strong> {{ evento.fecha_inicio }}</p>
                             <p><strong>Fecha de Fin:</strong> {{ evento.fecha_fin }}</p>
                             <p><strong>Descripción:</strong> PURA PARRANDAAAAAAAA</p>
-                            <a href="#" class="btn-boletos">Boletos</a>
+                            <a href="{% url 'boletos_por_evento' evento.id %}" class="btn-boletos">Boletos</a>
+                            <a href="{% url 'agregar_evento' %}" class="btn-agregar">Agregar Evento</a>
+
+
                         </div>
                     </div>
                 {% endfor %}

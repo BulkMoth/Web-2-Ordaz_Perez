@@ -1,6 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .forms import EventoForm 
 from django.http import HttpResponse
 from .models import Boleto, Evento
+from django.shortcuts import render, get_object_or_404
+from .models import Producto
+from django.http import JsonResponse
+
 
 def index(request):
     return HttpResponse("Hola, mundo. Esta es la página de inicio de la aplicación examen.")
@@ -57,3 +62,74 @@ def eventos(request):
         "total_eventos": eventos.count(),
     }
     return render(request, 'eventos/eventos.html', data)
+
+def boletos_por_evento(request, evento_id):
+    evento = get_object_or_404(Evento, id=evento_id)  # Obtiene el evento
+    boletos = Boleto.objects.filter(evento=evento)  # Filtra los boletos de ese evento
+    
+    context = {
+        'titulo': f'Boletos para {evento.name}',
+        'evento': evento,
+        'boletos': boletos
+    }
+    return render(request, 'boletos/boletos.html', context)
+
+def agregar_evento(request):
+    if request.method == "POST":
+        form = EventoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('eventos')  # Asegúrate de que 'eventos' es el nombre correcto de la URL
+    else:
+        form = EventoForm()
+    
+    return render(request, 'eventos/agregar_evento.html', {'form': form})
+
+def mostrar_productos(request):
+    productos = Producto.objects.all()
+    return render(request, 'examen/productos/productos.html', {'productos': productos})
+
+def agregar_producto(request):
+    if request.method == "POST":
+        # Obtener los datos del formulario
+        name = request.POST.get('name')
+        precio = request.POST.get('precio')
+        localidad_id = request.POST.get('localidad')
+
+        # Validar los datos
+        if not name or not precio or not localidad_id:
+            return JsonResponse({'error': 'Ningún campo puede quedar vacío'}, status=400)
+
+        try:
+            precio = float(precio)
+            if precio <= 0:
+                return JsonResponse({'error': 'El precio debe ser mayor a 0'}, status=400)
+        except ValueError:
+            return JsonResponse({'error': 'El precio debe ser un número válido'}, status=400)
+
+        # Obtener la localidad
+        try:
+            localidad = Localidad.objects.get(id=localidad_id)
+        except Localidad.DoesNotExist:
+            return JsonResponse({'error': 'Localidad no válida'}, status=400)
+
+        # Verificar cuántos productos se han agregado hoy
+        from django.utils import timezone
+        today = timezone.now().date()
+        productos_hoy = Producto.objects.filter(fecha_creacion__date=today).count()
+
+        if productos_hoy >= 10:
+            return JsonResponse({'error': 'Solo se pueden agregar 10 productos por día'}, status=400)
+
+        # Crear el nuevo producto
+        producto = Producto(name=name, precio=precio, localidad=localidad)
+        producto.save()
+
+        return JsonResponse({'message': 'Producto agregado correctamente'})
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+def obtener_productos(request):
+    productos = Producto.objects.values('id', 'name', 'precio', 'localidad__nombre')
+    return JsonResponse(list(productos), safe=False)
+

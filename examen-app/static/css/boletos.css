@@ -102,3 +102,21 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+.boton-comprar {
+    display: inline-block;
+    background-color: #ea44e5;
+    color: white;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    
+}
+
+.boton-comprar:hover {
+    background-color: #c937c1;
+    transform: scale(1.05);
+}
