@@ -1,11 +1,13 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { LikeContext } from '../contexts/LikeContext';
 import '../styles/EpisodeDetail.css';
 
 const EpisodeDetail = () => {
   const { id } = useParams();
   const [episode, setEpisode] = useState(null);
   const [characters, setCharacters] = useState([]);
+  const { likes, toggleLike } = useContext(LikeContext);
 
   useEffect(() => {
     // Fetch details of the episode
@@ -40,6 +42,10 @@ const EpisodeDetail = () => {
             <img src={character.image} alt={character.name} className="character-image" />
             <h4>{character.name}</h4>
             <p>{character.species} - {character.status}</p>
+            <button onClick={() => toggleLike(character.id)}>
+              {likes[character.id] ? 'Quitar Like' : 'Dar Like'}
+            </button>
+            <p>Likes: {likes[character.id] ? 1 : 0}</p>
           </div>
         ))}
       </div>

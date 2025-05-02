@@ -1,33 +1,39 @@
 .navbar {
-  position: fixed; /* Fija la barra en la parte superior */
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%; /* Ocupa todo el ancho */
-  background-color: #000; /* Fondo negro */
-  color: #fff; /* Texto blanco */
+  width: 100%;
+  background-color: #0b0c10; /* Fondo oscuro */
+  color: #fff;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1000; /* Asegura que esté encima de otros elementos */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3); /* Sombra verde */
+}
+
+.navbar-logo a {
+  color: #00ff00; /* Verde neón */
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
 }
 
 .navbar-links {
-  display: flex;
   list-style: none;
-  gap: 1rem;
+  display: flex;
+  gap: 15px;
   margin: 0;
   padding: 0;
 }
 
 .navbar-links a {
-  color: #fff;
+  color: #00bfff; /* Azul vibrante */
   text-decoration: none;
   font-size: 1rem;
-  transition: color 0.3s ease;
 }
 
 .navbar-links a:hover {
-  color: #1abc9c; /* Cambia el color al pasar el cursor */
+  color: #00ff00; /* Verde neón */
 }
