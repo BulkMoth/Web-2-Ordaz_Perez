@@ -1,30 +1,65 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import StaticPage from './pages/StaticPage';
-import Search from './pages/Search';
-import EpisodeDetail from './pages/EpisodeDetail';
-import CharacterDetail from './pages/CharacterDetail';
-import NavBar from './components/NavBar';
-import { LikeProvider } from './contexts/LikeContext';
-import './styles/app.css';
+import React, { useEffect, useState } from 'react';
+import './App.css';
+import PropertyCard from './components/PropertyCard';
 
+const API_URL =
+  'https://raw.githubusercontent.com/devchallenges-io/curriculum/refs/heads/main/4-frontend-libaries/challenges/group_1/data/property-listing-data.json';
 
 function App() {
+  const [properties, setProperties] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        setProperties(data);
+        setFiltered(data);
+      });
+  }, []);
+
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearch(value);
+    const result = value
+      ? properties.filter(
+          (p) =>
+            p.title.toLowerCase().includes(value) ||
+            p.description.toLowerCase().includes(value)
+        )
+      : properties;
+    setFiltered(result);
+  };
+
   return (
-    <LikeProvider>
-      <BrowserRouter>
-        <NavBar />
-        <div className="app-container">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/estatica" element={<StaticPage />} />
-            <Route path="/busqueda" element={<Search />} />
-            <Route path="/episodio/:id" element={<EpisodeDetail />} />
-            <Route path="/personaje/:id" element={<CharacterDetail />} />
-          </Routes>
+    <div className="app">
+      <div className="hero">
+        <img
+          src="https://cdn.pixabay.com/photo/2019/07/15/08/32/australia-4338882_1280.jpg"
+          alt="hero"
+        />
+        <div className="hero-text">
+          <h1>Book unique places to stay and things to do.</h1>
+          <p>Unforgettable trips start with Airbnb.</p>
+          <input
+            type="text"
+            placeholder="Search"
+            value={search}
+            onChange={handleSearch}
+          />
         </div>
-      </BrowserRouter>
-    </LikeProvider>
+      </div>
+
+     
+      <div className="container">
+        <div className="property-grid">
+          {filtered.map((property, index) => (
+            <PropertyCard key={index} data={property} />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
